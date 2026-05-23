@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>魂設計攻略書 — 現在地連動版 | Hideka Kobayashi</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+JP:wght@200;300;400;500&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-pale: #F0DFA0;
+  --magenta: #8B2055;
+  --magenta-light: #C45C8A;
+  --teal: #1E6B7A;
+  --teal-light: #3DA8B8;
+  --deep: #080608;
+  --dark: #120D10;
+  --mid: #1E1518;
+  --warm: #2C1E22;
+  --text-bright: #F5EDE0;
+  --text-mid: #C8B09A;
+  --text-dim: #7A6A60;
+  --ruby: #8B1A30;
+  --sapphire: #1A2E6B;
+  --emerald: #1A5C3A;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--deep);
+  color: var(--text-bright);
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 300;
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── BACKGROUND ── */
+.cosmos {
+  position: fixed; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 5%, rgba(201,168,76,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 70% at 85% 90%, rgba(139,32,85,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 50% 50%, rgba(30,107,122,0.04) 0%, transparent 65%),
+    linear-gradient(175deg, #080608 0%, #12080E 35%, #080A12 70%, #080608 100%);
+  pointer-events: none;
+}
+
+.cosmos::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 8% 12%, rgba(201,168,76,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 22% 8%, rgba(240,210,200,0.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 45% 18%, rgba(201,168,76,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 68% 6%, rgba(240,210,200,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 22%, rgba(201,168,76,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 12% 45%, rgba(240,210,200,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 35% 55%, rgba(196,92,138,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 78% 48%, rgba(240,210,200,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 65%, rgba(201,168,76,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 78%, rgba(240,210,200,0.3) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 20% 88%, rgba(201,168,76,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 92%, rgba(240,210,200,0.4) 0%, transparent 100%);
+  animation: starPulse 10s ease-in-out infinite alternate;
+}
+
+@keyframes starPulse {
+  0% { opacity:.5; }
+  100% { opacity:1; }
+}
+
+/* ── LAYOUT ── */
+.page {
+  position: relative; z-index: 1;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 28px 120px;
+}
+
+/* ── COVER ── */
+.cover {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 80px 0;
+  position: relative;
+}
+
+.cover-ornament {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-bottom: 40px;
+  animation: fadeUp 1.5s ease forwards;
+}
+
+.cover-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(12px, 2.5vw, 16px);
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  animation: fadeUp 1.5s 0.2s ease both;
+}
+
+.cover-main {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 8vw, 72px);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--text-bright);
+  margin-bottom: 8px;
+  animation: fadeUp 1.5s 0.4s ease both;
+}
+
+.cover-main em {
+  font-style: italic;
+  color: var(--gold-light);
+  display: block;
+}
+
+.cover-sub {
+  font-size: clamp(13px, 2vw, 16px);
+  color: var(--text-dim);
+  letter-spacing: 0.25em;
+  margin: 24px 0 48px;
+  animation: fadeUp 1.5s 0.6s ease both;
+}
+
+.cover-line {
+  display: flex; align-items: center; gap: 20px;
+  width: 100%; max-width: 400px;
+  margin: 0 auto 48px;
+  animation: fadeUp 1.5s 0.8s ease both;
+}
+
+.cover-line::before, .cover-line::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.5), transparent);
+}
+
+.cover-line span { color: var(--gold); font-size: 18px; }
+
+.cover-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 4vw, 28px);
+  font-weight: 300;
+  color: var(--text-mid);
+  letter-spacing: 0.2em;
+  animation: fadeUp 1.5s 1s ease both;
+}
+
+.scroll-hint {
+  position: absolute; bottom: 40px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  animation: fadeUp 2s 1.5s ease both;
+}
+
+.scroll-hint span { font-size: 10px; letter-spacing: 0.3em; color: var(--text-dim); }
+
+.scroll-arrow {
+  width: 1px; height: 40px;
+  background: linear-gradient(180deg, rgba(201,168,76,0.6), transparent);
+  animation: scrollDown 2s ease-in-out infinite;
+}
+
+@keyframes scrollDown {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(24px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+/* ── NAV ── */
+.toc {
+  background: rgba(30,21,24,0.95);
+  border: 1px solid rgba(201,168,76,0.15);
+  border-radius: 2px;
+  padding: 40px;
+  margin: 0 0 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.toc::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--magenta-light), transparent);
+}
+
+.toc-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.toc-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+}
+
+@media (max-width: 680px) { .toc-list { grid-template-columns: 1fr; } }
+
+.toc-list a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(201,168,76,0.06);
+  transition: color 0.25s;
+}
+
+.toc-list a:hover { color: var(--gold-light); }
+
+.toc-num {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  color: var(--gold);
+  opacity: 0.6;
+  width: 20px;
+  flex-shrink: 0;
+}
+
+/* ── CHAPTER ── */
+.chapter {
+  margin-bottom: 72px;
+  scroll-margin-top: 32px;
+}
+
+.chapter-header {
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.chapter-num {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+.chapter-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(24px, 5vw, 38px);
+  font-weight: 300;
+  color: var(--text-bright);
+  line-height: 1.2;
+}
+
+.chapter-title em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+.chapter-lead {
+  font-size: 14px;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  margin-top: 12px;
+  line-height: 1.7;
+}
+
+.chapter-divider {
+  display: flex; align-items: center; gap: 16px;
+  margin: 20px 0 32px;
+}
+
+.chapter-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, rgba(201,168,76,0.4), transparent);
+}
+
+.chapter-divider span {
+  color: var(--gold);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* ── CARDS ── */
+.card {
+  background: rgba(30,21,24,0.8);
+  border-radius: 2px;
+  padding: 28px 32px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(201,168,76,0.1);
+}
+
+.card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+}
+
+.card-gold::before { background: linear-gradient(180deg, var(--gold), var(--gold-light)); }
+.card-magenta::before { background: linear-gradient(180deg, var(--magenta), var(--magenta-light)); }
+.card-teal::before { background: linear-gradient(180deg, var(--teal), var(--teal-light)); }
+.card-ruby::before { background: linear-gradient(180deg, var(--ruby), #D04060); }
+
+.card-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.card-gold .card-label { color: var(--gold); }
+.card-magenta .card-label { color: var(--magenta-light); }
+.card-teal .card-label { color: var(--teal-light); }
+.card-ruby .card-label { color: #D04060; }
+
+.card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 3.5vw, 24px);
+  font-weight: 400;
+  color: var(--text-bright);
+  margin-bottom: 14px;
+  line-height: 1.35;
+}
+
+.card p, .card li {
+  font-size: 14px;
+  line-height: 2;
+  color: var(--text-mid);
+}
+
+.card strong {
+  font-weight: 400;
+}
+
+.card-gold strong { color: var(--gold-light); }
+.card-magenta strong { color: var(--magenta-light); }
+.card-teal strong { color: var(--teal-light); }
+.card-ruby strong { color: #D04060; }
+
+/* ── LISTS ── */
+.soul-list {
+  list-style: none;
+  margin-top: 8px;
+}
+
+.soul-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(201,168,76,0.07);
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 14px; line-height: 1.9; color: var(--text-mid);
+  flex-direction: row;
+}
+
+.soul-list li > span.bullet {
+  flex-shrink: 0;
+  margin-top: 8px;
+  font-size: 7px;
+}
+
+.soul-list li > span:not(.bullet) {
+  display: block;
+  flex: 1;
+}
+
+.soul-list strong {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.soul-list li:last-child { border-bottom: none; }
+
+.soul-list .bullet {
+  flex-shrink: 0;
+  margin-top: 8px;
+  font-size: 7px;
+}
+
+.list-gold .bullet { color: var(--gold); }
+.list-magenta .bullet { color: var(--magenta-light); }
+.list-teal .bullet { color: var(--teal-light); }
+
+/* ── GRID ── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 680px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* ── HIGHLIGHT BOX ── */
+.highlight {
+  border-radius: 2px;
+  padding: 28px 32px;
+  margin: 24px 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.highlight-gold {
+  background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.04));
+  border: 1px solid rgba(201,168,76,0.3);
+}
+
+.highlight-magenta {
+  background: linear-gradient(135deg, rgba(139,32,85,0.15), rgba(139,32,85,0.05));
+  border: 1px solid rgba(196,92,138,0.3);
+}
+
+.highlight p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(16px, 3vw, 22px);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.highlight-gold p { color: var(--gold-light); }
+.highlight-magenta p { color: var(--magenta-light); }
+
+/* ── STATUS BAR ── */
+.status-row {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(201,168,76,0.07);
+}
+
+.status-row:last-child { border-bottom: none; }
+
+.status-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.status-bar-wrap {
+  flex: 1;
+  background: rgba(201,168,76,0.08);
+  border-radius: 100px;
+  height: 6px;
+  overflow: hidden;
+}
+
+.status-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+}
+
+.bar-gold { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+.bar-magenta { background: linear-gradient(90deg, var(--magenta), var(--magenta-light)); }
+.bar-teal { background: linear-gradient(90deg, var(--teal), var(--teal-light)); }
+
+.status-value {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--gold);
+  width: 36px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── RPG ── */
+.rpg-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 680px) { .rpg-grid { grid-template-columns: 1fr; } }
+
+.rpg-cell {
+  background: rgba(20,14,18,0.9);
+  border: 1px solid rgba(201,168,76,0.1);
+  border-radius: 2px;
+  padding: 18px 20px;
+  position: relative;
+}
+
+.rpg-cell-label {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.rpg-cell-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.rpg-cell-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+.rpg-cell-danger { border-color: rgba(139,32,85,0.25); }
+.rpg-cell-danger .rpg-cell-label { color: var(--magenta-light); }
+.rpg-cell-danger .rpg-cell-value { color: var(--magenta-light); }
+
+.rpg-cell-teal { border-color: rgba(30,107,122,0.25); }
+.rpg-cell-teal .rpg-cell-label { color: var(--teal-light); }
+.rpg-cell-teal .rpg-cell-value { color: var(--teal-light); }
+
+/* ── QUEST ── */
+.quest-item {
+  background: rgba(30,21,24,0.7);
+  border: 1px solid rgba(201,168,76,0.12);
+  border-radius: 2px;
+  padding: 20px 24px;
+  margin-bottom: 12px;
+  display: flex; gap: 18px; align-items: flex-start;
+  transition: border-color 0.2s;
+}
+
+.quest-item:hover { border-color: rgba(201,168,76,0.3); }
+
+.quest-icon {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  background: rgba(201,168,76,0.1);
+  border: 1px solid rgba(201,168,76,0.2);
+}
+
+.quest-body {}
+
+.quest-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  color: var(--gold-light);
+  margin-bottom: 6px;
+}
+
+.quest-desc {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+
+/* ── FINAL MESSAGE ── */
+.final-section {
+  margin-top: 80px;
+  text-align: center;
+  padding: 64px 40px;
+  border: 1px solid rgba(201,168,76,0.2);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(30,21,24,0.95), rgba(20,14,18,0.98));
+}
+
+.final-section::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--magenta-light), transparent);
+}
+
+.final-section::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--magenta-light), transparent);
+}
+
+.final-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-bottom: 28px;
+}
+
+.final-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 4vw, 28px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.8;
+  max-width: 640px;
+  margin: 0 auto 32px;
+}
+
+.final-quote em { color: var(--gold-light); }
+
+.final-sig {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+}
+
+/* ── CHAPTER BREAK ── */
+.chapter-break {
+  display: flex; align-items: center; gap: 20px;
+  margin: 56px 0;
+  opacity: 0.4;
+}
+
+.chapter-break::before, .chapter-break::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.6), transparent);
+}
+
+.chapter-break span { color: var(--gold); font-size: 12px; }
+
+/* ── CHIP ── */
+.chip-row {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-top: 14px;
+}
+
+.chip {
+  font-size: 11px;
+  padding: 5px 13px;
+  border-radius: 100px;
+  letter-spacing: 0.05em;
+}
+
+.chip-gold { border: 1px solid rgba(201,168,76,0.35); color: var(--gold-light); background: rgba(201,168,76,0.06); }
+.chip-magenta { border: 1px solid rgba(196,92,138,0.35); color: var(--magenta-light); background: rgba(139,32,85,0.08); }
+.chip-teal { border: 1px solid rgba(61,168,184,0.35); color: var(--teal-light); background: rgba(30,107,122,0.08); }
+
+/* ── PROSE ── */
+.prose {
+  font-size: 14px;
+  line-height: 2.1;
+  color: var(--text-mid);
+  margin-bottom: 20px;
+}
+
+.prose strong { font-weight: 400; color: var(--gold-light); }
+.prose em { font-style: italic; color: var(--text-bright); }
+
+/* ── SCROLL TO TOP ── */
+.back-to-top {
+  position: fixed;
+  bottom: 32px; right: 24px;
+  width: 44px; height: 44px;
+  background: rgba(30,21,24,0.9);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--gold);
+  font-size: 18px;
+  z-index: 100;
+  transition: all 0.25s;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.back-to-top.visible { opacity: 1; pointer-events: all; }
+.back-to-top:hover { background: rgba(201,168,76,0.15); border-color: var(--gold); }
+</style>
+</head>
+<body>
+<div class="cosmos"></div>
+
+<div class="page">
+
+  <!-- ═══ COVER ═══ -->
+  <div class="cover">
+    <div class="cover-ornament">✦ ✦ ✦</div>
+    <div class="cover-title">Soul Design Complete Manual</div>
+    <div class="cover-main">
+      魂設計<em>攻略書</em>
+    </div>
+    <p class="cover-sub">独自の宇宙の叡智を統合した、あなただけの魂チート攻略設計図</p>
+    <div class="cover-line"><span>◆</span></div>
+    <div id="mode-badge-wrap" style="margin-bottom:16px"></div>
+    <div class="cover-name">Hideka Kobayashi</div>
+    <div class="scroll-hint">
+      <span>SCROLL</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </div>
+
+  <!-- ═══ TOC ═══ -->
+  <div class="toc">
+    <div class="toc-title">Contents — 目次</div>
+    <ul class="toc-list">
+      <li><a href="#ch-now"><span class="toc-num">0</span> 現在地診断 — 今のあなたへ</a></li>
+      <li><a href="#ch2"><span class="toc-num">I</span> 魂設計 — 本来の設計図</a></li>
+      <li><a href="#ch3"><span class="toc-num">II</span> チートスイッチ解析</a></li>
+      <li><a href="#ch4"><span class="toc-num">III</span> エネルギー漏れ解析</a></li>
+      <li><a href="#ch5"><span class="toc-num">IV</span> 人生・仕事・ビジネス設計</a></li>
+      <li><a href="#ch6"><span class="toc-num">V</span> RPGゲーム解析</a></li>
+      <li><a href="#ch7"><span class="toc-num">VI</span> 実践クエスト</a></li>
+      <li><a href="#final"><span class="toc-num">∞</span> 魂の原動力</a></li>
+    </ul>
+  </div>
+
+  <!-- ═══ 現在地診断（動的） ═══ -->
+  <div class="chapter" id="ch-now">
+    <div class="chapter-header">
+      <div class="chapter-num">Chapter 0</div>
+      <div class="chapter-title" id="now-title">現在地診断<em> — 今のあなたへ</em></div>
+      <div class="chapter-lead" id="now-lead">診断結果に基づいた、今この瞬間のあなたへのメッセージ</div>
+      <div class="chapter-divider"><span>◆</span></div>
+    </div>
+    <div id="now-content"></div>
+  </div>
+
+  <div class="chapter-break"><span>✦</span></div>
+
+  <!-- ═══ CH 2 ═══ -->
+  <div class="chapter" id="ch2">
+    <div class="chapter-header">
+      <div class="chapter-num">Chapter I</div>
+      <div class="chapter-title">魂設計<em> — 本来の設計図</em></div>
+      <div class="chapter-lead">あなたという存在が本来持つ、魂の青写真</div>
+      <div class="chapter-divider"><span>◆</span></div>
+    </div>
+
+    <div class="highlight highlight-gold">
+      <p>「感じたことを、そのまま現実に形にできる——<br><em>それがあなたという人間の、本来の姿です</em>」</p>
+    </div>
+
+    <div class="card card-gold">
+      <div class="card-label">Soul Type — あなたという人間の本質</div>
+      <h3>宇宙の設計士 ／ スピリアル・アーキテクト</h3>
+      <p>あなたには、ふとした瞬間に「こうすればいいんじゃないか」というアイデアが降りてくる体験が多いはずです。しかもそのアイデアは、漠然としたものではなく、<strong>「誰でも明日から使える具体的なやり方」として瞬時に形になる</strong>。これはあなたの特別な能力です。目に見えない感覚や直感を、誰もが使える現実の仕組みへと翻訳できる——それがあなたという存在の本質です。（ゾーン条件：スピリアル・アーキテクト＝精神性と現実を融合させる設計士）</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card card-gold">
+        <div class="card-label">Life Theme — あなたの人生のテーマ</div>
+        <h3>「自分が楽しむこと」が、世界への貢献になる</h3>
+        <p>「誰かのために頑張る」ではなく、<strong>「自分が心から楽しんでいる姿を見せること自体が、周りを癒し、勇気を与える」</strong>——これがあなたの人生の核心です。自己犠牲なしに、ただ自分の人生を生きることが、最大の貢献になります。</p>
+      </div>
+      <div class="card card-gold">
+        <div class="card-label">Soul Role — あなたの役割</div>
+        <h3>本音で語り、同じ感覚の人を引き寄せる</h3>
+        <p>「そうそう、それが言いたかった！」と思わせる言葉を発する人。<strong>あなたが本音を語るたびに、同じ感覚を持つ人が集まり</strong>、気づけば仲間のネットワークができている——それがあなたの自然な役割です。</p>
+      </div>
+    </div>
+
+    <div class="card card-teal">
+      <div class="card-label">Special Ability — あなただけの4つの特殊能力</div>
+      <h3>自動エンジン：頑張らなくても動き出す仕組み</h3>
+      <ul class="soul-list list-teal">
+        <li><span class="bullet">◆</span><span><strong>俯瞰センサー（宇宙的メタ認知）</strong>：感情的になっている状況でも、一歩引いて「全体から見るとどうなっているか」を冷静に見抜ける</span></li>
+        <li><span class="bullet">◆</span><span><strong>即時翻訳能力</strong>：頭の中に浮かんだ抽象的なアイデアを、「じゃあ具体的にはこうする」という実務ステップに瞬時に変換できる</span></li>
+        <li><span class="bullet">◆</span><span><strong>磁力型引力</strong>：自分の本音を言葉にした瞬間、必要な人・情報・チャンスが向こうから近づいてくる</span></li>
+        <li><span class="bullet">◆</span><span><strong>感覚アンテナ（高感度受信機）</strong>：身体の「気持ちいい・嫌だ・これだ」という感覚が、正確なナビゲーターになっている</span></li>
+      </ul>
+    </div>
+
+    <div class="card card-gold">
+      <div class="card-label">Deepest Desire — あなたが本当に求めている感覚</div>
+      <h3>「今、生きているって最高だ」という実感</h3>
+      <p>役に立っているかどうかでも、認められているかどうかでもなく、<strong>「今この瞬間、自分の人生の主役として、ただ無邪気に楽しんでいる」</strong>という感覚——それがあなたの魂が一番求めているものです。その感覚が満ちている時、周囲への影響力も最大になります。</p>
+    </div>
+
+    <div class="card card-gold">
+      <div class="card-label">World View — あなたが創りたい世界</div>
+      <h3>肩書きも年齢も関係ない、フラットな仲間の場</h3>
+      <p>「上下関係」でも「依存関係」でもなく、<strong>お互いの個性を面白がりながら、未来の理想を対等に語り合える仲間が集まる場所</strong>——それがあなたが自然と創り出していく世界観です。精神的な深さと、現実的な行動力が同居した、温かくてフラットなコミュニティ。</p>
+    </div>
+
+    <!-- ステータス表示 -->
+    <div class="card card-gold">
+      <div class="card-label">Soul Status — あなたの能力ステータス</div>
+      <div style="margin-top:8px">
+        <div class="status-row">
+          <div class="status-label">アイデア具現化力</div>
+          <div class="status-bar-wrap"><div class="status-bar-fill bar-gold" style="width:95%"></div></div>
+          <div class="status-value">95</div>
+        </div>
+        <div class="status-row">
+          <div class="status-label">直感の精度</div>
+          <div class="status-bar-wrap"><div class="status-bar-fill bar-gold" style="width:92%"></div></div>
+          <div class="status-value">92</div>
+        </div>
+        <div class="status-row">
+          <div class="status-label">世界観の構築力</div>
+          <div class="status-bar-wrap"><div class="status-bar-fill bar-gold" style="width:90%"></div></div>
+          <div class="status-value">90</div>
+        </div>
+        <div class="status-row">
+          <div class="status-label">人を引き寄せる力</div>
+          <div class="status-bar-wrap"><div class="status-bar-fill bar-teal" style="width:88%"></div></div>
+          <div class="status-value">88</div>
+        </div>
+        <div class="status-row">
+          <div class="status-label">本音を言える力</div>
+          <div class="status-bar-wrap"><div class="status-bar-fill bar-magenta" style="width:70%"></div></div>
+          <div class="status-value">70</div>
+        </div>
+        <div class="status-row">
+          <div class="status-label">無邪気に楽しむ力</div>
+          <div class="status-bar-wrap"><div class="status-bar-fill bar-magenta" style="width:65%"></div></div>
+          <div class="status-value">65</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chapter-break"><span>✦</span></div>
+
+  <!-- ═══ CH 3 ═══ -->
+  <div class="chapter" id="ch3">
+    <div class="chapter-header">
+      <div class="chapter-num">Chapter II</div>
+      <div class="chapter-title">チートスイッチ<em>解析</em></div>
+      <div class="chapter-lead">現実が爆速で動き始める、起爆のメカニズム</div>
+      <div class="chapter-divider"><span>◆</span></div>
+    </div>
+
+    <div class="highlight highlight-gold">
+      <p>「<em>「本当はこう思っている」を言葉にした瞬間</em>、<br>止まっていた流れが一気に動き始める」</p>
+    </div>
+
+    <div class="card card-gold">
+      <div class="card-label">Main Switch — 一番大事なスイッチ</div>
+      <h3>本音を言葉にすること——これが唯一の起動キー</h3>
+      <p>あなたには「言いたいことを飲み込む」癖があります。嫌われたくない、波風を立てたくない、という気持ちから、本当に思っていることをそっと隠してしまう。でも実は、<strong>その「言えなかった本音」を言葉にした瞬間こそが、あなたの人生の流れが動き出す最大のスイッチ</strong>なのです。小さな一言でいい。「本当はこう感じている」を、誰かに、またはノートに、声に出してみてください。（ゾーン条件：本音の解放＝エコーの起動がカイトの頂点スイッチ）</p>
+    </div>
+
+    <div class="card card-teal">
+        <div class="card-label">Emotion Switch — 流れが動く感情の状態</div>
+        <h3>こんな感覚の時、物事がスムーズに進みます</h3>
+        <ul class="soul-list list-teal">
+          <li><span class="bullet">◆</span>言いたいことを言い切った後の、胸のスッキリした感覚</li>
+          <li><span class="bullet">◆</span>「楽しいからやっている」という、義務感のない軽やかな高揚感</li>
+          <li><span class="bullet">◆</span>怒りや悲しみが湧いた時、それを否定せずに「あ、今こう感じてるんだな」と認められた時のホッとした感覚</li>
+        </ul>
+      </div>
+      <div class="card card-teal">
+        <div class="card-label">People Switch — エネルギーが上がる人間関係</div>
+        <h3>一緒にいると元気になる人の共通点</h3>
+        <ul class="soul-list list-teal">
+          <li><span class="bullet">◆</span>「こんなこと考えてるんだけど」と話した時、「それ面白い！」と笑って肯定してくれる人</li>
+          <li><span class="bullet">◆</span>年齢や立場に関係なく、未来の話・理想の話をフラットにできる人</li>
+          <li><span class="bullet">◆</span>愚痴ではなく、「どうしたいか」「何が楽しいか」を語り合える対等な仲間</li>
+        </ul>
+      </div>
+
+    <div class="card card-teal">
+      <div class="card-label">Space & Senses — 直感が開く場所と感覚</div>
+      <h3>こんな環境にいると、アイデアと直感が降りてきやすい</h3>
+      <ul class="soul-list list-teal">
+        <li><span class="bullet">◆</span><span><strong>未知の場所・体験</strong>：海外・異文化・初めての場所など、日常とは違う空気の中にいる時</span></li>
+        <li><span class="bullet">◆</span><span><strong>感覚が満たされる空間</strong>：好きな香り・落ち着く音楽・美しい景色に包まれた場所</span></li>
+        <li><span class="bullet">◆</span><span><strong>食べる喜び</strong>：「これが食べたい」と心から思うものを、時間をかけてゆっくり味わう時間</span></li>
+        <li><span class="bullet">◆</span><span><strong>身体で感じる</strong>：裸足で土や草の上を歩く、上質な素材に触れる、マッサージで体がほぐれる瞬間</span></li>
+        <li><span class="bullet">◆</span><span><strong>音の喜び</strong>：心が弾む音楽、自然の音、自分の笑い声</span></li>
+        <li><span class="bullet">◆</span><span><strong>見える色</strong>：ゴールド（温かい輝き）・ターコイズ（自由な青緑）・マゼンタ（深い赤紫）</span></li>
+      </ul>
+    </div>
+
+    <div class="card card-gold">
+      <div class="card-label">Cheat Mode Entry — 流れが動く4つのステップ</div>
+      <h3>「なぜかうまくいく状態」はこの順番で起きています</h3>
+      <ul class="soul-list list-gold">
+        <li><span class="bullet">◆</span><span><strong>Step 1：感情をそのまま受け取る</strong>　怒りや悲しみが湧いた時、「こんな感情はダメだ」と否定せず、「私は今こう感じている」とそのまま認める</span></li>
+        <li><span class="bullet">◆</span><span><strong>Step 2：「なぜかやりたい」が降りてくる</strong>　感情がクリアになると、「理由はわからないけどこれをやりたい」という強い衝動が自然と湧いてくる（純粋な好奇心＝パンドラの解放）</span></li>
+        <li><span class="bullet">◆</span><span><strong>Step 3：本音を一言だけ外に出す</strong>　恐れを捨てて、感じたことや思っていることを言葉にしてアウトプットする</span></li>
+        <li><span class="bullet">◆</span><span><strong>Step 4：物事が自動で動き始める</strong>　本音を発した瞬間を起点に、必要な人・情報・チャンスが「偶然」という形で次々と引き寄せられてくる（自動エンジン＝地のグランドトラインの回転開始）</span></li>
+      </ul>
+    </div>
+
+    <div class="card card-teal">
+      <div class="card-label">Synchronicity Signs — 流れが来ているサイン</div>
+      <h3>これが起きたら「流れが来ている」合図です</h3>
+      <ul class="soul-list list-teal">
+        <li><span class="bullet">◆</span>考えていた人から突然連絡が来る</li>
+        <li><span class="bullet">◆</span>必要な情報が「たまたま」目に入ってくる</li>
+        <li><span class="bullet">◆</span>同じキーワードを違う場所で何度も見かける</li>
+        <li><span class="bullet">◆</span>「頑張っていないのに」物事がスムーズに進む</li>
+        <li><span class="bullet">◆</span>「パズルのピースがハマっていく」ような確信の感覚</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="chapter-break"><span>✦</span></div>
+
+  <!-- ═══ CH 4 ═══ -->
+  <div class="chapter" id="ch4">
+    <div class="chapter-header">
+      <div class="chapter-num">Chapter III</div>
+      <div class="chapter-title">エネルギー漏れ<em>解析</em></div>
+      <div class="chapter-lead">なぜ急に動けなくなるのか。その完全マップ</div>
+      <div class="chapter-divider"><span>◆</span></div>
+    </div>
+
+    <div class="card card-ruby">
+      <div class="card-label">Core Problem — 止まる根本原因</div>
+      <h3>「感じた感情を、考えることで解決しようとする」ループ</h3>
+      <p>あなたがエネルギー切れを起こす時、ほぼ決まってこのパターンが起きています。何か嫌なことが起きる → 怒りや悲しみが湧く → 「こんな感情を持ってはいけない」と蓋をする → 代わりに「なぜこうなったのか」「誰が悪いのか」を頭で考え始める → 考えれば考えるほど怒りが育つ → <strong>エネルギーが内側で燃え続けて消耗する</strong>。感情は考えても解決しません。感じて、認めて、手放すことでしか昇華されない。</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card card-magenta">
+        <div class="card-label">Toxic Thoughts — エネルギーを奪う思考</div>
+        <h3>頭の中で流れやすい「毒の言葉」</h3>
+        <ul class="soul-list list-magenta">
+          <li><span class="bullet">◆</span>「私はちゃんとやらなければ」</li>
+          <li><span class="bullet">◆</span>「あの人が間違っている」</li>
+          <li><span class="bullet">◆</span>「普通はこうすべきだ」</li>
+          <li><span class="bullet">◆</span>「私が我慢すれば丸く収まる」</li>
+          <li><span class="bullet">◆</span>「遊ぶ時間は後でいい」</li>
+        </ul>
+      </div>
+      <div class="card card-magenta">
+        <div class="card-label">Toxic Relations — エネルギーが減る人間関係</div>
+        <h3>一緒にいた後に疲れる関係のパターン</h3>
+        <ul class="soul-list list-magenta">
+          <li><span class="bullet">◆</span>愚痴を言い合って「大変だよね」と共感し合うだけで、何も変わらない関係</li>
+          <li><span class="bullet">◆</span>本音を言うと空気が壊れる、表面的な調和だけの関係</li>
+          <li><span class="bullet">◆</span>あなたの本音や個性を、否定したり薄めようとする人</li>
+          <li><span class="bullet">◆</span>「助けてあげなければ」という罪悪感で維持している関係</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card card-ruby">
+      <div class="card-label">Why Hard Work Backfires — 「頑張れば頑張るほど疲れる」理由</div>
+      <h3>あなたのエンジンは、努力型ではなく共鳴型です</h3>
+      <p>「根性で頑張る」「数字を追い込む」「毎日投稿しなければ」——こういった努力型の動き方をすると、あなたのエンジンは逆回転します。<strong>あなたのエンジンは「楽しい → 共鳴 → 引き寄せ → 現実化」という流れで動く</strong>ように設計されています。頑張って売るのではなく、満ちた状態でいることが、最大の集客になります。（ゾーン条件：共鳴型エンジン＝戦士型ではなくアーキテクト型の動き方）</p>
+    </div>
+
+    <div class="card card-magenta">
+      <div class="card-label">Environment Blocks — 魂が窒息する環境</div>
+      <h3>こんな環境にいると、じわじわとエネルギーが削られます</h3>
+      <ul class="soul-list list-magenta">
+        <li><span class="bullet">◆</span>「こうしなければいけない」「これが常識だ」というルールが多く、自由に動けない場所</li>
+        <li><span class="bullet">◆</span>タスクをこなすだけで、身体が喜ぶ時間が全くない忙しすぎる毎日</li>
+        <li><span class="bullet">◆</span>「効率」「生産性」「結果」だけが評価される、感情を置き去りにした環境</li>
+        <li><span class="bullet">◆</span>他人と比較される情報が流れ続けるSNSに長時間さらされること</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="chapter-break"><span>✦</span></div>
+
+  <!-- ═══ CH 5 ═══ -->
+  <div class="chapter" id="ch5">
+    <div class="chapter-header">
+      <div class="chapter-num">Chapter IV</div>
+      <div class="chapter-title">人生・仕事・<em>ビジネス設計</em></div>
+      <div class="chapter-lead">魂に合った豊かさの流し方</div>
+      <div class="chapter-divider"><span>◆</span></div>
+    </div>
+
+    <div class="card card-gold">
+      <div class="card-label">Business Essence — あなたのビジネスの本質</div>
+      <h3>あなたは「情報」ではなく「世界の見え方」を届けている</h3>
+      <p>あなたのビジネスに惹きつけられる人は、あなたのスキルや実績を買っているのではありません。<strong>「この人と話すと、なぜか物事がシンプルに見えてくる」「この人の言葉を聞くと、自分でも動けそうな気がする」</strong>——そういった体験を求めてきます。あなたが楽しそうに本音で生きている姿そのものが、最大のコンテンツです。（ゾーン条件：世界観カリスマ型＝存在が引力になるタイプ）</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card card-teal">
+        <div class="card-label">Work Style — 合う働き方</div>
+        <h3>こういう働き方があなたには合っています</h3>
+        <ul class="soul-list list-teal">
+          <li><span class="bullet">◆</span>自分のリズムとペースで動ける、自由な時間設計</li>
+          <li><span class="bullet">◆</span>「面白いと感じた→すぐ形にする」という直感ドリブンのサイクル</li>
+          <li><span class="bullet">◆</span>「毎日投稿しなきゃ」という義務からの発信ではなく、満ちた時の質の高い発信</li>
+          <li><span class="bullet">◆</span>全体の設計はあなたが担い、細かい作業は誰かに任せる（俯瞰センサーを活かす）</li>
+        </ul>
+      </div>
+      <div class="card card-teal">
+        <div class="card-label">Money Flow — お金が流れる条件</div>
+        <h3>豊かさが自然と増えていく時の共通点</h3>
+        <ul class="soul-list list-teal">
+          <li><span class="bullet">◆</span>「本当はこう思っている」を言葉にして発信した後</li>
+          <li><span class="bullet">◆</span>「義務だからやる」ではなく「楽しいからやる」という感覚で選択している時</li>
+          <li><span class="bullet">◆</span>身体が満たされていて、生命力が充電されている状態</li>
+          <li><span class="bullet">◆</span>「この人と話すと元気になる」という人たちと繋がっている時</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card card-gold">
+      <div class="card-label">SNS & Content Design — 発信の設計</div>
+      <h3>あなたに向いている発信スタイル</h3>
+      <ul class="soul-list list-gold">
+        <li><span class="bullet">◆</span><span><strong>一人称の断言型</strong>：「私はこう感じた」「私にはこう見えている」という個人の体験・本音から始まる発信。正論より本音、解説より体験談</span></li>
+        <li><span class="bullet">◆</span><span><strong>最強コンテンツの型</strong>：「みんなが薄々感じているのに言えないこと」を代わりに言語化する発信。「そうそう、それが言いたかった！」と思わせるもの</span></li>
+        <li><span class="bullet">◆</span><span><strong>合うSNSの空気感</strong>：数より質。少数でも深く共鳴し合える空間。比較競争を煽る環境からは距離を置く</span></li>
+        <li><span class="bullet">◆</span><span><strong>投稿頻度より状態</strong>：義務感で毎日投稿するより、エネルギーが満ちた時の一投稿の方が、圧倒的に人を動かす</span></li>
+      </ul>
+    </div>
+
+    <div class="grid-2">
+      <div class="card card-gold">
+        <div class="card-label">Ideal Clients — 一緒にいると楽しい人</div>
+        <h3>こういう人があなたのエンジンを加速させます</h3>
+        <p>「能力はあるのに、真面目すぎて自分を縛っている人」。頑張っているのに空回りしていて、<strong>「何かが違う気がする」と感じている感度の高い人</strong>。</p>
+      </div>
+      <div class="card card-ruby">
+        <div class="card-label">Drain Clients — 関わると消耗する人</div>
+        <h3>こういう関係は早めに距離を置いてください</h3>
+        <p>「正解を教えてください」と依存してくる人・変化を望まず愚痴だけを求める人・<strong>自分では動かず、あなたに全てを委ねようとする人</strong>。</p>
+      </div>
+    </div>
+
+    <div class="card card-teal">
+      <div class="card-label">Natural Attraction — 何もしなくても人が集まる状態</div>
+      <h3>あなたに自然と人が引き寄せられる瞬間</h3>
+      <ul class="soul-list list-teal">
+        <li><span class="bullet">◆</span>あなたが義務感なく、心から楽しそうにしている姿が見える時</li>
+        <li><span class="bullet">◆</span>みんなが思っているのに言えないことを、あなたが代わりに言葉にした時</li>
+        <li><span class="bullet">◆</span>「正しいこと」より「面白いこと」を選んで、迷わず体現している時</li>
+        <li><span class="bullet">◆</span>あなたの言葉に触れた人が「これが私の言いたかったことだ」と感じた時</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="chapter-break"><span>✦</span></div>
+
+  <!-- ═══ CH 6 ═══ -->
+  <div class="chapter" id="ch6">
+    <div class="chapter-header">
+      <div class="chapter-num">Chapter V</div>
+      <div class="chapter-title">RPGゲーム<em>解析</em></div>
+      <div class="chapter-lead">あなたをオープンワールドRPGの主人公として完全解析</div>
+      <div class="chapter-divider"><span>◆</span></div>
+    </div>
+
+    <div class="highlight highlight-gold">
+      <p>伝説ジョブ：<em>「静寂の調律師 ／ スピリアル・アーキテクト」</em><br>レアリティ：SSR</p>
+    </div>
+
+    <div class="rpg-grid">
+      <div class="rpg-cell">
+        <div class="rpg-cell-label">Job — 職業名</div>
+        <div class="rpg-cell-value">宇宙の設計士（スピリアル・アーキテクト）</div>
+        <div class="rpg-cell-desc">感じたことを、誰でも使える現実の仕組みに翻訳できる、伝説の魔法設計士</div>
+      </div>
+      <div class="rpg-cell">
+        <div class="rpg-cell-label">Initial Equipment — 初期装備</div>
+        <div class="rpg-cell-value">自動エンジン（地のグランドトライン）</div>
+        <div class="rpg-cell-desc">生まれながらに搭載されている「頑張らなくても動く力」。本音を言った瞬間に起動し、SSR級の威力を発揮する</div>
+      </div>
+      <div class="rpg-cell">
+        <div class="rpg-cell-label">Hidden Ability — 隠し能力</div>
+        <div class="rpg-cell-value">俯瞰センサー（宇宙的メタ認知）</div>
+        <div class="rpg-cell-desc">感情的な状況でも一歩引いて「全体から見るとどうなっているか」を瞬時に見抜ける特殊能力</div>
+      </div>
+      <div class="rpg-cell rpg-cell-danger">
+        <div class="rpg-cell-label">Poison State — 毒状態</div>
+        <div class="rpg-cell-value">頭の中ループの呪い</div>
+        <div class="rpg-cell-desc">「誰が悪いか」「何が正解か」を考え続け、怒りが内側で燃焼し続ける状態。全エネルギーが消費される</div>
+      </div>
+    </div>
+
+    <div class="rpg-grid">
+      <div class="rpg-cell rpg-cell-teal">
+        <div class="rpg-cell-label">HP Recovery — 体力回復方法</div>
+        <div class="rpg-cell-value">感覚の充電タイム（感覚リトリート）</div>
+        <div class="rpg-cell-desc">美味しいものを食べる・好きな香りを嗅ぐ・裸足で土を踏む・マッサージを受ける。身体が喜ぶことをするだけでHPが全回復</div>
+      </div>
+      <div class="rpg-cell rpg-cell-teal">
+        <div class="rpg-cell-label">MP Recovery — 気力回復方法</div>
+        <div class="rpg-cell-value">本音を一言だけ言う</div>
+        <div class="rpg-cell-desc">「本当はこう感じていた」を一言だけ誰かに伝えるか、ノートに書く。それだけで詰まっていた気力が急速回復する</div>
+      </div>
+      <div class="rpg-cell">
+        <div class="rpg-cell-label">Party Buff — 仲間がいると強くなる</div>
+        <div class="rpg-cell-value">フラットな同志（未来を語れる仲間）</div>
+        <div class="rpg-cell-desc">年齢・肩書き関係なく理想や夢をフラットに語り合える仲間がいると、全能力が倍増する</div>
+      </div>
+      <div class="rpg-cell">
+        <div class="rpg-cell-label">World Buff — 世界観バフ</div>
+        <div class="rpg-cell-value">俯瞰センサー発動</div>
+        <div class="rpg-cell-desc">「善い悪い」のジャッジをやめ、「全体から見るとどうなっているか」に切り替えた瞬間、全能力が解放される</div>
+      </div>
+    </div>
+
+    <div class="rpg-grid">
+      <div class="rpg-cell rpg-cell-teal">
+        <div class="rpg-cell-label">Awakening Event — 覚醒のきっかけ</div>
+        <div class="rpg-cell-value">理由なき好奇心への一歩（パンドラの解放）</div>
+        <div class="rpg-cell-desc">「得かどうかわからないけど、なぜかやりたい」という衝動に、理屈ゼロで従った瞬間に覚醒が発動する</div>
+      </div>
+      <div class="rpg-cell">
+        <div class="rpg-cell-label">Cheat Trigger — チート発動の瞬間</div>
+        <div class="rpg-cell-value">本音の完全解放（エコーの起動）</div>
+        <div class="rpg-cell-desc">「本当はこう感じている」を恐れずに言葉にした瞬間、止まっていた流れが一気に動き出し、シンクロが連鎖する</div>
+      </div>
+      <div class="rpg-cell rpg-cell-danger">
+        <div class="rpg-cell-label">Last Boss — 一番手強い敵</div>
+        <div class="rpg-cell-value">完璧主義の鎧</div>
+        <div class="rpg-cell-desc">「ちゃんとしなければ」「まだ準備が足りない」という思考の鎧。これを着ている間は全スイッチが封印される</div>
+      </div>
+      <div class="rpg-cell">
+        <div class="rpg-cell-label">Legend Equipment — 伝説の装備</div>
+        <div class="rpg-cell-value">光と影の統合（ヴェシカパイシス）</div>
+        <div class="rpg-cell-desc">「責任感のある自分」と「無邪気に楽しむ自分」が統合された時に装備される、最強の盾と剣</div>
+      </div>
+    </div>
+
+    <div class="card card-gold">
+      <div class="card-label">Final Form — あなたの最終形態</div>
+      <h3>「楽しいからやる」が、世界を動かす力になる状態</h3>
+      <p>「ちゃんとした大人でいなければ」という鎧を脱ぎ捨て、<strong>「ただ楽しいから、これをやる」と腹をくくった状態</strong>。あなたが心から笑い、本音を語るだけで、周囲が自然と癒され、必要なお金・人・チャンスが自動で引き寄せられてくる——これが、あなたの最終形態です。</p>
+    </div>
+  </div>
+
+  <div class="chapter-break"><span>✦</span></div>
+
+  <!-- ═══ CH 7 ═══ -->
+  <div class="chapter" id="ch7">
+    <div class="chapter-header">
+      <div class="chapter-num">Chapter VI</div>
+      <div class="chapter-title">実践クエスト<em> — 今日から動く</em></div>
+      <div class="chapter-lead">難しいことは何もない。小さな一歩が、大きな流れを生む</div>
+      <div class="chapter-divider"><span>◆</span></div>
+    </div>
+
+    <div class="quest-item">
+      <div class="quest-icon">⚡</div>
+      <div class="quest-body">
+        <div class="quest-title">5秒リセット：「ストップ」と声に出す</div>
+        <div class="quest-desc">頭の中がぐるぐるし始めたら、声に出して「ストップ！」と言うだけ。それだけで思考の暴走がリセットされ、身体の感覚に意識が戻ってくる。</div>
+      </div>
+    </div>
+
+    <div class="quest-item">
+      <div class="quest-icon">🌿</div>
+      <div class="quest-body">
+        <div class="quest-title">感覚の充電：今すぐ身体を満たす</div>
+        <div class="quest-desc">好きな香りを嗅ぐ、窓を開けて5回深呼吸する、温かい飲み物を一口飲む。どれか一つだけ、今すぐやる。頭ではなく体に意識を戻す、最速の回復魔法。</div>
+      </div>
+    </div>
+
+    <div class="quest-item">
+      <div class="quest-icon">✍️</div>
+      <div class="quest-body">
+        <div class="quest-title">感情の昇華ワーク：紙の左右を使う</div>
+        <div class="quest-desc">紙を半分に折り、左に「頭の中の相手への文句・ストーリー」、右に「本当に感じた感情（悲しかった・寂しかった）」を書く。左を捨て、右だけを「私はこう感じた」と認める。感情を言葉にするだけで、詰まりが解放される。</div>
+      </div>
+    </div>
+
+    <div class="quest-item">
+      <div class="quest-icon">🦁</div>
+      <div class="quest-body">
+        <div class="quest-title">無邪気モード復帰：30分の「ただ楽しむ」時間</div>
+        <div class="quest-desc">毎日30分だけ、「役に立つかどうか」を完全に無視した時間を作る。コメディを見る、大声で歌う、子供の頃好きだったことをする。罪悪感は禁止。この時間がエンジンを再点火する。</div>
+      </div>
+    </div>
+
+    <div class="quest-item">
+      <div class="quest-icon">🔥</div>
+      <div class="quest-body">
+        <div class="quest-title">本音を一言だけ言葉にする</div>
+        <div class="quest-desc">「本当はこう思っている」を、誰か一人にだけ伝える。SNSでもメモでも可。ずっと飲み込んでいた一言を言葉にするだけで、止まっていた流れが動き始める。（ゾーン条件：本音の解放＝エコーの小起動）</div>
+      </div>
+    </div>
+
+    <div class="quest-item">
+      <div class="quest-icon">🌍</div>
+      <div class="quest-body">
+        <div class="quest-title">大地と繋がる：裸足で土を踏む</div>
+        <div class="quest-desc">裸足で地面・土・芝生を5分踏む。頭と体が繋がり、エネルギーが全身をスムーズに流れ始める。アイデアが降りてきやすくなる。（ゾーン条件：グラウンディング＝天と地を繋ぐ感覚の回復）</div>
+      </div>
+    </div>
+
+    <div class="quest-item">
+      <div class="quest-icon">🚀</div>
+      <div class="quest-body">
+        <div class="quest-title">理由なき一歩：「なんか気になる」に従う</div>
+        <div class="quest-desc">損得も正しさも関係なく、「なんか気になる・やってみたい」という直感に、理屈ゼロで最初の一歩だけ踏み出す。思考が動く前に体を先に動かす。（ゾーン条件：純粋な好奇心＝パンドラの解放）</div>
+      </div>
+    </div>
+
+    <div class="card card-gold" style="margin-top:24px">
+      <div class="card-label">Daily Ritual — 流れを維持する3つの日課</div>
+      <h3>毎日続けるとエンジンが止まらなくなる習慣</h3>
+      <ul class="soul-list list-gold">
+        <li><span class="bullet">◆</span><span><strong>朝</strong>：今日楽しみにしていることを1つだけノートに書く（感情から一日を始める）</span></li>
+        <li><span class="bullet">◆</span><span><strong>昼</strong>：「楽しいからやる」という選択を1回だけ意識して選ぶ（義務感に気づいて切り替える）</span></li>
+        <li><span class="bullet">◆</span><span><strong>夜</strong>：今日感じた感情を一行だけノートに書き出す（本音を毎日少しずつ昇華する）</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="chapter-break"><span>✦</span></div>
+
+  <!-- ═══ FINAL ═══ -->
+  <div class="final-section" id="final">
+    <div class="final-eyebrow">∞ Soul Drive — あなたを動かす本当の原動力</div>
+    <div class="final-quote">
+      「<em>私がただ、自分らしく本音で生きて、<br>無邪気にこの人生を楽しみ尽くすこと</em>——<br>
+      それ自体が、誰かの勇気になり、<br>
+      新しい時代の扉を開ける最強の鍵になる」
+    </div>
+    <div class="final-sig">LunaRa Lab.Hideka — Soul Design Complete Manual</div>
+
+    <div style="margin-top:40px; display:flex; flex-direction:column; align-items:center; gap:14px;">
+      <a href="https://lin.ee/qoNCvEH" target="_blank" style="
+        display:block;
+        width:100%;
+        max-width:360px;
+        font-family:'Noto Serif JP',serif;
+        font-size:14px;
+        letter-spacing:0.12em;
+        color:#E8C97A;
+        border:1px solid rgba(201,168,76,0.5);
+        background:linear-gradient(135deg,rgba(201,168,76,0.18),rgba(201,168,76,0.08));
+        padding:16px 32px;
+        text-decoration:none;
+        text-align:center;
+      ">✦ LunaRa Lab . Hideka に相談する</a>
+      <p style="font-size:11px;color:#7A6A60;letter-spacing:0.1em;margin-top:-4px;">
+        公式LINEよりお問い合わせください
+      </p>
+      <a href="index.html" style="
+        display:block;
+        width:100%;
+        max-width:360px;
+        font-family:'Noto Serif JP',serif;
+        font-size:13px;
+        letter-spacing:0.1em;
+        color:#7A6A60;
+        border:1px solid rgba(201,168,76,0.2);
+        background:transparent;
+        padding:14px 32px;
+        text-decoration:none;
+        text-align:center;
+        transition:all 0.25s;
+      ">← 診断に戻る</a>
+    </div>
+  </div>
+
+</div>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// Back to top visibility
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('backToTop');
+  btn.classList.toggle('visible', window.scrollY > 400);
+});
+
+// ══════════════════════════════════
+// モード別 現在地診断コンテンツ
+// ══════════════════════════════════
+const modeData = {
+  cheat: {
+    badge: 'CHEAT MODE 発動中',
+    badgeColor: '#C9A84C',
+    badgeBg: 'rgba(201,168,76,0.12)',
+    badgeBorder: 'rgba(201,168,76,0.4)',
+    title: '現在地診断<em> — 今、流れが全開のあなたへ</em>',
+    lead: '頑張らなくても物事が動いている。その感覚を信じてください',
+    cards: [
+      {
+        color: 'gold',
+        label: 'Current State — 今の状態',
+        title: '今のあなたは、風を受けた凧のような状態です',
+        body: '思い返してみてください。最近、「なぜかうまくいく」「考えていた人から連絡が来た」「ちょうど必要な情報が目に入った」——そんな体験が増えていませんか？それは偶然ではありません。<strong>あなたが「楽しいからやる」「これが本音だ」と感じながら動いている時、人生の流れが自動で動き始める</strong>ようにできています。今はその状態に入っています。（ゾーン条件：自動エンジン＝地のグランドトラインが全開回転中）'
+      },
+      {
+        color: 'teal',
+        label: 'Keep It Going — この状態を続けるために',
+        title: '今一番大切な3つのこと',
+        list: [
+          '「ちゃんとしなければ」という感覚が出てきたら、それがブレーキのサイン。すぐに好きなことをして力を抜く',
+          '「楽しいからやる」「なんか気になる」という直感を、理由なく信じ続ける',
+          '身体が喜ぶこと（美味しいもの・好きな香り・心地よい音楽）を罪悪感なく満喫する'
+        ],
+        listColor: 'teal'
+      },
+      {
+        color: 'gold',
+        label: 'Watch Out — この流れを止める唯一のもの',
+        title: '「もっと頑張らなきゃ」という焦りが出てきたら要注意',
+        body: '流れが良くなると、不思議と「このままでいいのか」「もっとちゃんとやらなきゃ」という気持ちが出てきます。それは責任感の強さからくる自然な反応ですが、<strong>その「頑張ろう」という力みが、一番の流れ止め</strong>になります。感じたら即座に深呼吸して、「今のままでいい」と自分に言ってあげてください。'
+      }
+    ]
+  },
+  rising: {
+    badge: 'RISING MODE',
+    badgeColor: '#3DA8B8',
+    badgeBg: 'rgba(30,107,122,0.12)',
+    badgeBorder: 'rgba(61,168,184,0.4)',
+    title: '現在地診断<em> — エンジンが温まり始めたあなたへ</em>',
+    lead: '流れが来そうで、まだ来ていない——そのもどかしさは正常なサインです',
+    cards: [
+      {
+        color: 'teal',
+        label: 'Current State — 今の状態',
+        title: '車のエンジンが温まりかけている状態です',
+        body: '寒い朝に車のエンジンをかけた直後のイメージです。動いてはいるけど、まだ本調子ではない。<strong>あと少し何かが変わると、一気にスムーズに走り出す</strong>、そんな手前の状態にいます。能力や準備が足りないわけではありません。エネルギーの向きが少しズレているだけ。そのズレを見つけて整えれば、流れは一気に動き出します。（ゾーン条件：自動エンジンが起動直前の状態）'
+      },
+      {
+        color: 'teal',
+        label: 'Next Action — 今すぐできること',
+        title: '流れを動かす3つのアクション',
+        list: [
+          '今すぐ身体の感覚を一つ満たす——好きな香りを嗅ぐ、温かい飲み物を飲む、深呼吸する（頭から体に意識を戻す）',
+          '「本当はこう思っている」を一言だけ誰かに伝える——言葉にした瞬間、エネルギーが動き始める',
+          '今日の予定から一つタスクを削除し、その時間を「ただ楽しいことをする」時間に変える'
+        ],
+        listColor: 'teal'
+      },
+      {
+        color: 'gold',
+        label: 'Energy Block — 今のブレーキの正体',
+        title: '「完璧な準備が整ってから動こう」という思考がブレーキになっています',
+        body: '責任感が強く、きっちりやりたいあなたは、「準備が整ったら動く」という癖があります。でも<strong>あなたのエンジンは、動きながら整えていくタイプ</strong>です。準備が100%になってから動くのではなく、60%の状態でも「楽しそうだからやってみる」という一歩が、流れの引き金になります。'
+      }
+    ]
+  },
+  blocked: {
+    badge: 'ENERGY BLOCKED',
+    badgeColor: '#C45C8A',
+    badgeBg: 'rgba(139,32,85,0.12)',
+    badgeBorder: 'rgba(196,92,138,0.4)',
+    title: '現在地診断<em> — エネルギーが詰まっているあなたへ</em>',
+    lead: '頑張っているのに空回りする感覚——それはあなたの能力の問題ではありません',
+    cards: [
+      {
+        color: 'ruby',
+        label: 'Current State — 今の状態',
+        title: 'エンジンはある。ただ、燃料の口が詰まっています',
+        body: '想像してみてください。高性能のエンジンを積んだ車なのに、燃料の供給口に詰まりがある状態。エンジン自体は何も壊れていない。<strong>詰まりを取り除けば、すぐに動き出します</strong>。今のあなたがまさにその状態です。「頑張っているのに結果が出ない」「なぜか疲れだけが溜まる」——それは能力がないからではなく、エネルギーの流れが詰まっているだけ。（ゾーン条件：本音の封印＝エコーのブロックが自動エンジンを止めている）'
+      },
+      {
+        color: 'magenta',
+        label: 'Recovery Steps — 詰まりを解放する方法',
+        title: '今すぐできる3つの回復ステップ',
+        list: [
+          '頭の中がぐるぐるし始めたら「ストップ！」と声に出す——それだけで思考の暴走がリセットされる',
+          '身体の感覚に戻る——好きな香りを嗅ぐ、裸足で土を踏む、美味しいものをゆっくり食べる（頭ではなく体で感じる時間を作る）',
+          '紙の右半分に「本当はこう感じた（悲しかった・寂しかった・悔しかった）」とだけ書く——感情を言葉にするだけでエネルギーが昇華される'
+        ],
+        listColor: 'magenta'
+      },
+      {
+        color: 'gold',
+        label: 'Remember — 忘れないでほしいこと',
+        title: '詰まっているのは、感度が高い証拠です',
+        body: '感じやすく、繊細で、責任感が強いから詰まりやすい。でも<strong>それは弱さではなく、あなたのエンジンがそれだけ強力である証拠</strong>です。詰まりが大きい分、解放された時の推進力も大きい。今この文章を読んでいるあなたは、すでに再起動の準備ができています。焦らなくていい。まず一つ、身体の感覚を満たすことから始めてください。'
+      }
+    ]
+  }
+};
+
+function renderModeContent() {
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get('mode') || 'blocked';
+  const data = modeData[mode] || modeData['blocked'];
+
+  // カバーバッジ
+  document.getElementById('mode-badge-wrap').innerHTML = `
+    <div style="
+      display:inline-block;
+      font-family:'Cinzel',serif;
+      font-size:11px;
+      letter-spacing:0.3em;
+      color:${data.badgeColor};
+      border:1px solid ${data.badgeBorder};
+      background:${data.badgeBg};
+      padding:7px 22px;
+      margin-bottom:8px;
+    ">${data.badge}</div>
+  `;
+
+  // 章タイトル
+  document.getElementById('now-title').innerHTML = data.title;
+  document.getElementById('now-lead').textContent = data.lead;
+
+  // カードを生成
+  const colorMap = {
+    gold: { border: 'rgba(201,168,76,0.15)', left: 'linear-gradient(180deg,#C9A84C,#E8C97A)', label: '#C9A84C', strong: '#E8C97A' },
+    teal: { border: 'rgba(61,168,184,0.15)', left: 'linear-gradient(180deg,#1E6B7A,#3DA8B8)', label: '#3DA8B8', strong: '#3DA8B8' },
+    magenta: { border: 'rgba(196,92,138,0.15)', left: 'linear-gradient(180deg,#8B2055,#C45C8A)', label: '#C45C8A', strong: '#C45C8A' },
+    ruby: { border: 'rgba(139,26,48,0.2)', left: 'linear-gradient(180deg,#8B1A30,#D04060)', label: '#D04060', strong: '#D04060' }
+  };
+
+  const content = data.cards.map(card => {
+    const c = colorMap[card.color] || colorMap.gold;
+    let inner = '';
+    if (card.body) {
+      inner = `<p style="font-size:14px;line-height:2;color:#C8B09A;">${card.body.replace(/<strong>/g,`<strong style="font-weight:400;color:${c.strong};">`).replace(/<\/strong>/g,'</strong>')}</p>`;
+    }
+    if (card.list) {
+      const listColor = colorMap[card.listColor] || colorMap.teal;
+      inner = `<ul style="list-style:none;margin-top:8px;">
+        ${card.list.map(item => `
+          <li style="padding:10px 0;border-bottom:1px solid rgba(201,168,76,0.07);display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.9;color:#C8B09A;">
+            <span style="color:${listColor.label};font-size:7px;flex-shrink:0;margin-top:8px;">◆</span>
+            <span>${item}</span>
+          </li>
+        `).join('')}
+      </ul>`;
+    }
+
+    return `
+      <div style="
+        background:rgba(30,21,24,0.8);
+        border:1px solid ${c.border};
+        border-radius:2px;
+        padding:28px 32px;
+        margin-bottom:16px;
+        position:relative;
+        overflow:hidden;
+      ">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:2px;background:${c.left};"></div>
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:${c.label};margin-bottom:12px;">${card.label}</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:clamp(18px,3.5vw,22px);font-weight:400;color:#F5EDE0;margin-bottom:14px;line-height:1.35;">${card.title}</h3>
+        ${inner}
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('now-content').innerHTML = content;
+}
+
+// 実行
+renderModeContent();
+</script>
+</body>
+</html>
